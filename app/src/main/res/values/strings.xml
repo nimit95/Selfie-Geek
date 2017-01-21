@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Selfie Geek</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Log In</string>
+    <string name="no_account">Doesn\'t have an Account? Click here to Sign Up</string>
+</resources>
