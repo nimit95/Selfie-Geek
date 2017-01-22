@@ -2,12 +2,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context="com.task.selfiegeek.fragments.CameraFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="right|center"
+        android:text="S\nL\nI\nD\nE\n\nT\nO\n\nV\nI\nE\nW"
+        android:textColor="#ffffff"/>
 
 </FrameLayout>

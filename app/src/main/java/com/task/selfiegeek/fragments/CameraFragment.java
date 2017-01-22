@@ -1,13 +1,24 @@
 package com.task.selfiegeek.fragments;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.task.selfiegeek.R;
+import com.task.selfiegeek.activity.CameraPreview;
+import com.task.selfiegeek.utils.Constants;
+
+import java.io.File;
 
 
 public class CameraFragment extends Fragment {
@@ -15,7 +26,8 @@ public class CameraFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private Camera mCamera;
+    private CameraPreview mPreview;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -54,6 +66,24 @@ public class CameraFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_camera, container, false);
+        View view = inflater.inflate(R.layout.fragment_camera, container, false);
+        mCamera = getCameraInstance();
+        mCamera.setDisplayOrientation(90);
+        mPreview = new CameraPreview(getActivity(), mCamera,getActivity().getWindowManager().getDefaultDisplay().getWidth(),0);
+        FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
+        preview.addView(mPreview);
+        Constants.imgNumber++;
+
+        return view ;
+    }
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
     }
 }
