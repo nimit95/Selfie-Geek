@@ -3,6 +3,8 @@ package com.task.selfiegeek.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,7 @@ import com.task.selfiegeek.activity.MainActivity;
 public class ViewUpload extends Fragment {
 
     private Toolbar toolbar;
-
+    RecyclerView recyclerView;
     public ViewUpload() {
         // Required empty public constructor
     }
@@ -30,6 +32,9 @@ public class ViewUpload extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_upload, container, false);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setHasFixedSize(true);
         return view;
     }
 }

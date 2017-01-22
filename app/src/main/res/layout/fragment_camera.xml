@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,4 +20,31 @@
         android:text="S\nL\nI\nD\nE\n\nT\nO\n\nV\nI\nE\nW"
         android:textColor="#ffffff"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/floatingActionButton" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_camera_front_black_24dp"
+        android:id="@+id/switch_camera"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_videocam_black_24dp"
+        android:id="@+id/video"/>
 </FrameLayout>
