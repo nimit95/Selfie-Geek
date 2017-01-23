@@ -4,14 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.task.selfiegeek.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URLConnection;
 import java.util.List;
 
 /**
@@ -40,8 +47,21 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         /*Glide.with(context)
                 .load(imageData.get(position).getPreviewURL())
                 .into(holder.image);*/
-        Bitmap bmp = BitmapFactory.decodeFile(imageData.get(position));
-        holder.image.setImageBitmap(bmp);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 64;
+        //Bitmap bmp = BitmapFactory.decodeFile(imageData.get(position),options);
+        /*if(isImageFile(imageData.get(position)))
+        { int THUMBSIZE = 128;
+
+            Bitmap bmp = ThumbnailUtils.extractThumbnail(
+                    BitmapFactory.decodeFile( imageData.get(position)),
+                    THUMBSIZE,
+                    THUMBSIZE);
+        holder.image.setImageBitmap(bmp);}*/
+        if(isImageFile(imageData.get(position))){
+        Picasso.with(context)
+
+                .load( new File(imageData.get(position))).resize(500,500).into(holder.image);}
     }
 
     @Override
@@ -67,4 +87,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             });
         }
     }
+    public static boolean isImageFile(String path) {
+        String mimeType = URLConnection.guessContentTypeFromName(path);
+        return mimeType != null && mimeType.startsWith("image");
+    }
+
+    public static boolean isVideoFile(String path) {
+        String mimeType = URLConnection.guessContentTypeFromName(path);
+        return mimeType != null && mimeType.startsWith("video");
+    }
+
 }
