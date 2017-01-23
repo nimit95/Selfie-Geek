@@ -16,7 +16,7 @@ public class MyPageAdapter extends FragmentPagerAdapter {
     public MyPageAdapter(FragmentManager fm) {
         super(fm);
     }
-
+    private ViewUpload viewUpload = new ViewUpload();
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position){
@@ -35,7 +35,7 @@ public class MyPageAdapter extends FragmentPagerAdapter {
             case 0:
                 return  new CameraFragment();
             case 1:
-                return new ViewUpload();
+                return viewUpload;
             default:
                 return null;
         }
@@ -45,4 +45,5 @@ public class MyPageAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return NUM_COUNT;
     }
+    public ViewUpload getFragment(){return viewUpload;}
 }

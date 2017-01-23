@@ -1,8 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/upload"
     tools:context="com.task.selfiegeek.fragments.ViewUpload">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,7 +16,8 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar"
         android:layout_height="match_parent"
         android:id="@+id/recycler_view" />
     <!-- TODO: Update blank fragment layout -->
-</FrameLayout>
+</RelativeLayout>
