@@ -5,6 +5,8 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -48,7 +50,9 @@ public class CameraFragment extends Fragment {
     private CameraPreview mPreview;
     private FloatingActionButton click, switchCamera, videoMode;
     private boolean isCamera = true;
-    private boolean isBack = true;
+    private MediaRecorder recorder;
+
+    private boolean isBack = true, isRecording = false;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -85,13 +89,18 @@ public class CameraFragment extends Fragment {
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                 .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE )
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE )
                 .check();
         mCamera = getCameraInstance(0);
 
         mPreview = new CameraPreview(getActivity(), mCamera,getActivity().getWindowManager().getDefaultDisplay().getWidth(),0);
         final FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
+        recorder = new MediaRecorder();
+        //prepareRecorder();
+        //recorder.setCamera(Camera.open());
+        //initRecorder();
+
         click = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
         switchCamera = (FloatingActionButton) view.findViewById(R.id.switch_camera);
         videoMode = (FloatingActionButton) view.findViewById(R.id.video);
@@ -108,6 +117,23 @@ public class CameraFragment extends Fragment {
                         }
                     },200);
 
+                }
+                else{
+                    if(isRecording){
+                        recorder.stop();
+                        isRecording = false;
+                        initRecorder();
+                        prepareRecorder();
+
+                    }
+                    else {
+                        prepareRecorder();
+                        recorder.start();
+
+
+                        isRecording = true;
+
+                    }
                 }
             }
         });
@@ -152,6 +178,7 @@ public class CameraFragment extends Fragment {
                 if(isCamera){
                     isCamera = false;
                     videoMode.setImageResource(R.drawable.ic_camera_alt_black_24dp);
+
                 }
                 else{
                     isCamera = true;
@@ -219,7 +246,10 @@ public class CameraFragment extends Fragment {
         params.setPictureSize(bestSize.width, bestSize.height);
         params.setJpegQuality(80);
         params.setJpegThumbnailQuality(80);
-        params.setRotation(rotate+180);
+        if(i==1)
+            params.setRotation(rotate+180);
+        else
+            params.setRotation(rotate);
         params.setPictureFormat(ImageFormat.JPEG);
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         c.setParameters(params);
@@ -255,4 +285,40 @@ public class CameraFragment extends Fragment {
             }
         }
     };
+    private void initRecorder() {
+        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        //recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        CamcorderProfile cpHigh = CamcorderProfile
+               .get(CamcorderProfile.QUALITY_HIGH);
+        recorder.setProfile(cpHigh);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+        String currentDateandTime = sdf.format(new Date());
+       // recorder.setOutputFile(imgLoc +File.separator+"video"+currentDateandTime+ ".mp4");
+        recorder.setOutputFile( Environment.getExternalStorageDirectory() + File.separator
+                + Environment.DIRECTORY_DCIM + File.separator + "FILE_NAME");
+        recorder.setMaxDuration(50000); // 50 seconds
+        recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+    }
+    private void prepareRecorder() {
+        recorder.setCamera(mCamera);
+        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+
+        CamcorderProfile cpHigh = CamcorderProfile
+                .get(CamcorderProfile.QUALITY_HIGH);
+        recorder.setProfile(cpHigh);
+        recorder.setOutputFile( Environment.getExternalStorageDirectory() + File.separator
+                + Environment.DIRECTORY_DCIM + File.separator + "FILE_NAME");
+        recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
+        try {
+            recorder.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
 }

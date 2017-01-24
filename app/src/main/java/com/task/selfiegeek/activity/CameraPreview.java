@@ -9,7 +9,7 @@ import android.view.SurfaceView;
 import java.io.IOException;
 
 /**
- * Created by Nimit Agg on 13-04-2016.
+ * Created by Nimit Agg on 22-01-2017.
  */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
@@ -42,6 +42,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         // empty. Take care of releasing the Camera preview in your activity.
+        //mCamera.stopPreview();
+        //mCamera.release();
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
