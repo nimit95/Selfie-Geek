@@ -5,16 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.task.selfiegeek.activity.SignUp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
 
+        android:layout_centerInParent="true" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textColor="#d44b2b"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text = "SELFIE GEEK"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:textColor="#d44b2b"
+            android:text = "Powered By"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/kinvey"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:layout_marginTop="50dp"
             android:hint="Username"
             android:inputType="textEmailAddress"
             android:id="@+id/email" />

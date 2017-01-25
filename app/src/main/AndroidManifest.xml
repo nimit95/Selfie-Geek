@@ -20,10 +20,12 @@
             android:theme="@style/NoActionbar"></activity>
         <activity
             android:name=".activity.SignUp"
+            android:theme="@style/NoActionbar"
             android:windowSoftInputMode="adjustResize">
 
         </activity>
         <activity android:name=".activity.LogIn"
+            android:theme="@style/NoActionbar"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
