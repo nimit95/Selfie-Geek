@@ -120,14 +120,25 @@ public class CameraFragment extends Fragment {
                 }
                 else{
                     if(isRecording){
+                        Log.e("chal","chal");
                         recorder.stop();
+                        preview.setVisibility(View.INVISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                preview.setVisibility(View.VISIBLE);
+                            }
+                        },200);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+                        String currentDateandTime = sdf.format(new Date());
+                        Toast.makeText(getActivity(),"Video saved at "+imgLoc + File.separator+"video"+currentDateandTime,Toast.LENGTH_SHORT).show();
                         isRecording = false;
-                        initRecorder();
-                        prepareRecorder();
-
+                        //initRecorder();
+                        //prepareRecorder();
+                        releaseMediaRecorder();
                     }
                     else {
-                        prepareRecorder();
+                        prepareRecorder2();
                         recorder.start();
 
 
@@ -194,14 +205,15 @@ public class CameraFragment extends Fragment {
         //releaseMediaRecorder();       // if you are using MediaRecorder, release it first
         //releaseCamera();              // release the camera immediately on pause event
     }
- /*   private void releaseMediaRecorder(){
-        if (mMediaRecorder != null) {
-            mMediaRecorder.reset();   // clear recorder configuration
-            mMediaRecorder.release(); // release the recorder object
-            mMediaRecorder = null;
+
+   private void releaseMediaRecorder(){
+        if (recorder != null) {
+            recorder.reset();   // clear recorder configuration
+            recorder.release(); // release the recorder object
+            recorder = null;
             mCamera.lock();           // lock camera for later use
         }
-    }*/
+    }
 
     private void releaseCamera(){
         if (mCamera != null){
@@ -301,24 +313,105 @@ public class CameraFragment extends Fragment {
         recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
     }
     private void prepareRecorder() {
-        recorder.setCamera(mCamera);
-        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-
         CamcorderProfile cpHigh = CamcorderProfile
                 .get(CamcorderProfile.QUALITY_HIGH);
-        recorder.setProfile(cpHigh);
-        recorder.setOutputFile( Environment.getExternalStorageDirectory() + File.separator
-                + Environment.DIRECTORY_DCIM + File.separator + "FILE_NAME");
+        try {
+/*        recorder.setCamera(mCamera);
+            recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
+        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+           // recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            //recorder.setAudioEncoder(cpHigh.audioCodec);
+           // recorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
+        //recorder.setVideoSize(mPreview.getWidth(),mPreview.getHeight());
+       // recorder.setVideoFrameRate(cpHigh.videoFrameRate);
+          //  recorder.setProfile(cpHigh);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+        String currentDateandTime = sdf.format(new Date());
+        recorder.setOutputFile(imgLoc +File.separator+"video"+currentDateandTime+".mp4");*/
+    /*    recorder.setVideoSize(50, 50);
+        recorder.setVideoEncodingBitRate(cpHigh.videoBitRate);
+        recorder.setAudioEncodingBitRate(cpHigh.audioBitRate);
+        recorder.setAudioChannels(cpHigh.audioChannels);
+        recorder.setAudioSamplingRate(cpHigh.audioSampleRate);*/
+            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_DOWNLINK);
+            recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+
+//            CamcorderProfile cpHigh = CamcorderProfile
+  //                  .get(CamcorderProfile.QUALITY_HIGH);
+            recorder.setProfile(cpHigh);
+            recorder.setOutputFile("/sdcard/videocapture_example.mp4");
+            recorder.setMaxDuration(50000); // 50 seconds
+            recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
         recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
+            //getActivity().wait(1000);
+            recorder.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            Log.e("yo",e+"");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("yo",e+"");
+        }
+    }
+    private void prepareRecorder2() {
+        recorder = new MediaRecorder();
+        recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
+        CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+        if (true) {
+            mCamera.unlock();
+            recorder.setCamera(mCamera);
+        }
+
+        recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+
+        recorder.setProfile(camcorderProfile);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+        String currentDateandTime = sdf.format(new Date());
+        // This is all very sloppy
+        if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
+            try {
+                File newFile = File.createTempFile("video"+currentDateandTime, ".3gp", new File(imgLoc));
+                recorder.setOutputFile(newFile.getAbsolutePath());
+            } catch (IOException e) {
+              ////  Log.v(LOGTAG,"Couldn't create file");
+                e.printStackTrace();
+                //finish();
+            }
+        } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
+            try {
+                File newFile = File.createTempFile("video"+currentDateandTime, ".3gp", new File(imgLoc));
+                recorder.setOutputFile(newFile.getAbsolutePath());
+            } catch (IOException e) {
+               // Log.v(LOGTAG,"Couldn't create file");
+                e.printStackTrace();
+               // finish();
+            }
+        } else {
+            try {
+                File newFile = File.createTempFile("video"+currentDateandTime, ".3gp", new File(imgLoc));
+                recorder.setOutputFile(newFile.getAbsolutePath());
+            } catch (IOException e) {
+               // Log.v(LOGTAG,"Couldn't create file");
+                e.printStackTrace();
+               // finish();
+            }
+
+        }
+        //recorder.setMaxDuration(50000); // 50 seconds
+        //recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+
         try {
             recorder.prepare();
         } catch (IllegalStateException e) {
             e.printStackTrace();
-
+           // finish();
         } catch (IOException e) {
             e.printStackTrace();
-
+           // finish();
         }
     }
 }

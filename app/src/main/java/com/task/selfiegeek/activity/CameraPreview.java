@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.task.selfiegeek.utils.Constants;
+
 import java.io.IOException;
 
 /**
@@ -27,6 +29,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.setFixedSize((int)(w/1),h);
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
+    public CameraPreview(Context context, Camera camera){
+        super(context);
+        mHolder = getHolder();
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
