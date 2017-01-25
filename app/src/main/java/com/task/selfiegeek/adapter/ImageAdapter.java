@@ -99,9 +99,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                     context.startActivity(intent);*/
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     if(isImageFile(imageData.get(getAdapterPosition())))
-                        intent.setDataAndType(Uri.parse(imageData.get(getAdapterPosition())),"image/.jpg");
+                        intent.setDataAndType(Uri.fromFile(new File(imageData.get(getAdapterPosition()))),"image/.jpg");
                     else
-                        intent.setDataAndType(Uri.parse(imageData.get(getAdapterPosition())),"video/");
+                        intent.setDataAndType(Uri.fromFile(new File(imageData.get(getAdapterPosition()))),"video/");
                     context.startActivity(intent);
                 }
             });

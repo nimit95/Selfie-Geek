@@ -23,7 +23,7 @@ public class UploadFile {
         this.context = context;
         getClient = new GetClient(context);
     }
-    void uploadFile(File target) throws IOException{
+    public void uploadFile(final File target) throws IOException{
         FileMetaData meta = new FileMetaData(target.getName())     ;
         meta.setId(target.getName());
        getClient.getClient().file().upload(meta, target, new UploaderProgressListener() {
@@ -34,7 +34,7 @@ public class UploadFile {
 
            @Override
            public void onSuccess(FileMetaData fileMetaData) {
-
+                Toast.makeText(context,"Uploaded "+ target.getName(),Toast.LENGTH_SHORT ).show();
            }
 
            @Override

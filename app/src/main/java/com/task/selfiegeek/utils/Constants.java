@@ -10,8 +10,8 @@ import java.io.File;
 public class Constants {
 
     public static final String TAG_SHARED_PREF = "sharedPreferences";
-    public static final String key = "kid_Sy5QVYxwe";
-    public static final String secretKey = "e9b077ecda02474aa42f50745edb6011";
+    public static final String key = "kid_rJtGRFUDg";
+    public static final String secretKey = "2a34a3ce4efb4e348715e345a5d41849";
     public static final String TAG = "Selfie Geek";
     public static  int imgNumber = 1;
     public static final int CAMERA_RQ = 6969;

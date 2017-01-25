@@ -6,4 +6,5 @@
     <string name="signup">Sign Up</string>
     <string name="login">Log In</string>
     <string name="no_account">Doesn\'t have an Account? Click here to Sign Up</string>
+    <string name="warning">Cannot change while recordind</string>
 </resources>

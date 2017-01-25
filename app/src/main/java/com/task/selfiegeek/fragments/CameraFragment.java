@@ -3,6 +3,7 @@ package com.task.selfiegeek.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.task.selfiegeek.Network.UploadFile;
 import com.task.selfiegeek.R;
 import com.task.selfiegeek.activity.CameraPreview;
 import com.task.selfiegeek.activity.MainActivity;
@@ -51,15 +53,16 @@ public class CameraFragment extends Fragment {
     private FloatingActionButton click, switchCamera, videoMode;
     private boolean isCamera = true;
     private MediaRecorder recorder;
+    private UploadFile uploadFile;
 
-    private boolean isBack = true, isRecording = false;
+    private String videoPath;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     public CameraFragment() {
         // Required empty public constructor
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +95,7 @@ public class CameraFragment extends Fragment {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE )
                 .check();
         mCamera = getCameraInstance(0);
-
+        uploadFile = new UploadFile(getActivity());
         mPreview = new CameraPreview(getActivity(), mCamera,getActivity().getWindowManager().getDefaultDisplay().getWidth(),0);
         final FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
@@ -136,11 +139,17 @@ public class CameraFragment extends Fragment {
                         //initRecorder();
                         //prepareRecorder();
                         releaseMediaRecorder();
+                        click.setImageResource(android.R.color.transparent);
+                        try {
+                            uploadFile.uploadFile(new File(getVideoPath()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         prepareRecorder2();
                         recorder.start();
-
+                        click.setImageResource(R.drawable.ic_stop_black_24dp);
 
                         isRecording = true;
 
@@ -151,7 +160,10 @@ public class CameraFragment extends Fragment {
         switchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isBack){
+                if(isRecording){
+                    Toast.makeText(getContext(),getString(R.string.warning),Toast.LENGTH_SHORT).show();
+                }
+                else if(isBack){
                     isBack = false;
                     switchCamera.setImageResource(R.drawable.ic_camera_rear_black_24dp);
                     mCamera.startPreview();
@@ -163,7 +175,6 @@ public class CameraFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     mCamera.startPreview();
                 }
                 else{
@@ -178,7 +189,6 @@ public class CameraFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     mCamera.startPreview();
                 }
             }
@@ -186,26 +196,31 @@ public class CameraFragment extends Fragment {
         videoMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isCamera){
+                if(isRecording){
+                    Toast.makeText(getContext(),getString(R.string.warning),Toast.LENGTH_SHORT).show();
+                }
+                else if(isCamera){
                     isCamera = false;
+                    click.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
                     videoMode.setImageResource(R.drawable.ic_camera_alt_black_24dp);
 
                 }
                 else{
                     isCamera = true;
+                    click.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
                     videoMode.setImageResource(R.drawable.ic_videocam_black_24dp);
                 }
             }
         });
         return view ;
     }
+
     @Override
     public void onPause() {
         super.onPause();
         //releaseMediaRecorder();       // if you are using MediaRecorder, release it first
         //releaseCamera();              // release the camera immediately on pause event
     }
-
    private void releaseMediaRecorder(){
         if (recorder != null) {
             recorder.reset();   // clear recorder configuration
@@ -268,6 +283,7 @@ public class CameraFragment extends Fragment {
         c.setDisplayOrientation(90);
         return c; // returns null if camera is unavailable
     }
+
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
         @Override
@@ -290,6 +306,7 @@ public class CameraFragment extends Fragment {
                 fos.write(data);
                 fos.close();
                 Toast.makeText(getActivity(),"Image saved at"+pictureFile.getPath()+"",Toast.LENGTH_SHORT).show();
+                uploadFile.uploadFile(pictureFile);
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -297,65 +314,6 @@ public class CameraFragment extends Fragment {
             }
         }
     };
-    private void initRecorder() {
-        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        //recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        CamcorderProfile cpHigh = CamcorderProfile
-               .get(CamcorderProfile.QUALITY_HIGH);
-        recorder.setProfile(cpHigh);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-        String currentDateandTime = sdf.format(new Date());
-       // recorder.setOutputFile(imgLoc +File.separator+"video"+currentDateandTime+ ".mp4");
-        recorder.setOutputFile( Environment.getExternalStorageDirectory() + File.separator
-                + Environment.DIRECTORY_DCIM + File.separator + "FILE_NAME");
-        recorder.setMaxDuration(50000); // 50 seconds
-        recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
-    }
-    private void prepareRecorder() {
-        CamcorderProfile cpHigh = CamcorderProfile
-                .get(CamcorderProfile.QUALITY_HIGH);
-        try {
-/*        recorder.setCamera(mCamera);
-            recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
-        recorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-           // recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-            //recorder.setAudioEncoder(cpHigh.audioCodec);
-           // recorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
-        //recorder.setVideoSize(mPreview.getWidth(),mPreview.getHeight());
-       // recorder.setVideoFrameRate(cpHigh.videoFrameRate);
-          //  recorder.setProfile(cpHigh);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-        String currentDateandTime = sdf.format(new Date());
-        recorder.setOutputFile(imgLoc +File.separator+"video"+currentDateandTime+".mp4");*/
-    /*    recorder.setVideoSize(50, 50);
-        recorder.setVideoEncodingBitRate(cpHigh.videoBitRate);
-        recorder.setAudioEncodingBitRate(cpHigh.audioBitRate);
-        recorder.setAudioChannels(cpHigh.audioChannels);
-        recorder.setAudioSamplingRate(cpHigh.audioSampleRate);*/
-            recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_DOWNLINK);
-            recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
-
-//            CamcorderProfile cpHigh = CamcorderProfile
-  //                  .get(CamcorderProfile.QUALITY_HIGH);
-            recorder.setProfile(cpHigh);
-            recorder.setOutputFile("/sdcard/videocapture_example.mp4");
-            recorder.setMaxDuration(50000); // 50 seconds
-            recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
-        recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
-            //getActivity().wait(1000);
-            recorder.prepare();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            Log.e("yo",e+"");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("yo",e+"");
-        }
-    }
     private void prepareRecorder2() {
         recorder = new MediaRecorder();
         recorder.setPreviewDisplay(mPreview.getHolder().getSurface());
@@ -371,11 +329,11 @@ public class CameraFragment extends Fragment {
         recorder.setProfile(camcorderProfile);
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
         String currentDateandTime = sdf.format(new Date());
-        // This is all very sloppy
         if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
             try {
                 File newFile = File.createTempFile("video"+currentDateandTime, ".3gp", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
+                setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
               ////  Log.v(LOGTAG,"Couldn't create file");
                 e.printStackTrace();
@@ -385,6 +343,7 @@ public class CameraFragment extends Fragment {
             try {
                 File newFile = File.createTempFile("video"+currentDateandTime, ".3gp", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
+                setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                // Log.v(LOGTAG,"Couldn't create file");
                 e.printStackTrace();
@@ -394,6 +353,7 @@ public class CameraFragment extends Fragment {
             try {
                 File newFile = File.createTempFile("video"+currentDateandTime, ".3gp", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
+                setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                // Log.v(LOGTAG,"Couldn't create file");
                 e.printStackTrace();
@@ -413,5 +373,15 @@ public class CameraFragment extends Fragment {
             e.printStackTrace();
            // finish();
         }
+
+    }
+
+    private boolean isBack = true, isRecording = false;
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
     }
 }
