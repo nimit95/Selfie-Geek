@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_gravity="center"
-            android:textColor="#d44b2b"
+            android:textColor="#F1582C"
             android:text = "Powered By"/>
         <ImageView
             android:layout_width="wrap_content"

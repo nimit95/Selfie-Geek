@@ -74,36 +74,12 @@ public class CameraFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-
-        };
-
-        new TedPermission(getActivity())
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE )
-                .check();
         mCamera = getCameraInstance(0);
         uploadFile = new UploadFile(getActivity());
         mPreview = new CameraPreview(getActivity(), mCamera,getActivity().getWindowManager().getDefaultDisplay().getWidth(),0);
         final FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         recorder = new MediaRecorder();
-        //prepareRecorder();
-        //recorder.setCamera(Camera.open());
-        //initRecorder();
-
         click = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
         switchCamera = (FloatingActionButton) view.findViewById(R.id.switch_camera);
         videoMode = (FloatingActionButton) view.findViewById(R.id.video);
@@ -136,8 +112,6 @@ public class CameraFragment extends Fragment {
                         String currentDateandTime = sdf.format(new Date());
                         Toast.makeText(getActivity(),"Video saved at "+imgLoc + File.separator+"video"+currentDateandTime,Toast.LENGTH_SHORT).show();
                         isRecording = false;
-                        //initRecorder();
-                        //prepareRecorder();
                         releaseMediaRecorder();
                         click.setImageResource(android.R.color.transparent);
                         try {
@@ -150,7 +124,6 @@ public class CameraFragment extends Fragment {
                         prepareRecorder2();
                         recorder.start();
                         click.setImageResource(R.drawable.ic_stop_black_24dp);
-
                         isRecording = true;
 
                     }
@@ -258,10 +231,7 @@ public class CameraFragment extends Fragment {
         }
         int rotate = (info.orientation - degrees + 360) % 360;
 
-//STEP #2: Set the 'rotation' parameter
-
-
-
+        //STEP #2: Set the 'rotation' parameter
         Camera.Parameters params = c.getParameters();
         List<Camera.Size> supportedSizes = params.getSupportedPictureSizes();
         Camera.Size bestSize = supportedSizes.get(0);
