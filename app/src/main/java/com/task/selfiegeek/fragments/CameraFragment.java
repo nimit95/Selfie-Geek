@@ -53,14 +53,13 @@ public class CameraFragment extends Fragment {
     private boolean isCamera = true;
     private MediaRecorder recorder;
     private UploadFile uploadFile;
-    private int i=0;
+
     private String videoPath;
-    private FrameLayout preview;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private FrameLayout preview;
     public CameraFragment() {
         // Required empty public constructor
     }
@@ -76,11 +75,11 @@ public class CameraFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
-        mCamera = getCameraInstance(0);
+
         uploadFile = new UploadFile(getActivity());
-        mPreview = new CameraPreview(getActivity(), mCamera, getActivity().getWindowManager().getDefaultDisplay().getWidth(), 0);
+
         preview = (FrameLayout) view.findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
+
         recorder = new MediaRecorder();
         click = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
         switchCamera = (FloatingActionButton) view.findViewById(R.id.switch_camera);
@@ -138,11 +137,10 @@ public class CameraFragment extends Fragment {
                 } else if (isBack) {
                     isBack = false;
                     switchCamera.setImageResource(R.drawable.ic_camera_rear_black_24dp);
-                    mCamera.stopPreview();
+                    mCamera.startPreview();
                     mCamera.release();
+                    mPreview.getHolder().removeCallback(mPreview);
                     mCamera = getCameraInstance(1);
-                    i=1;
-
                     mCamera.setDisplayOrientation(90);
                     try {
                         mCamera.setPreviewDisplay(mPreview.getHolder());
@@ -153,11 +151,10 @@ public class CameraFragment extends Fragment {
                 } else {
                     isBack = true;
                     switchCamera.setImageResource(R.drawable.ic_camera_front_black_24dp);
-                    mCamera.stopPreview();
+                    mCamera.startPreview();
                     mCamera.release();
-                    i = 0;
+                    mPreview.getHolder().removeCallback(mPreview);
                     mCamera = getCameraInstance(0);
-
                     mCamera.setDisplayOrientation(90);
                     try {
                         mCamera.setPreviewDisplay(mPreview.getHolder());
@@ -190,21 +187,20 @@ public class CameraFragment extends Fragment {
 
     @Override
     public void onPause() {
-        if(mCamera != null) {
-            mCamera.stopPreview();
-            mPreview.setCamera(null);
-            mCamera.release();
-            mCamera = null;
-        }
         super.onPause();
+        mPreview.getHolder().removeCallback(mPreview);
+        //releaseMediaRecorder();       // if you are using MediaRecorder, release it first
+        //releaseCamera();              // release the camera immediately on pause event
     }
 
     @Override
     public void onResume() {
+        Log.e("yah","yaj");
+
+        mCamera = getCameraInstance(0);
+        mPreview = new CameraPreview(getActivity(), mCamera, getActivity().getWindowManager().getDefaultDisplay().getWidth(), 0);
+        preview.addView(mPreview);
         super.onResume();
-        mCamera = getCameraInstance(i);
-        mCamera.startPreview();
-        mPreview.setCamera(mCamera);
     }
 
     private void releaseMediaRecorder() {
@@ -324,7 +320,7 @@ public class CameraFragment extends Fragment {
             try {
                 File newFile = File.createTempFile("video" + currentDateandTime, ".3gp", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
-                setVideoPath(newFile.getAbsolutePath()+".3gp");
+                setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                 ////  Log.v(LOGTAG,"Couldn't create file");
                 e.printStackTrace();
@@ -333,7 +329,7 @@ public class CameraFragment extends Fragment {
         } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
             try {
                 File newFile = File.createTempFile("video" + currentDateandTime, ".mp4", new File(imgLoc));
-                recorder.setOutputFile(newFile.getAbsolutePath()+".mp4");
+                recorder.setOutputFile(newFile.getAbsolutePath());
                 setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                 // Log.v(LOGTAG,"Couldn't create file");
