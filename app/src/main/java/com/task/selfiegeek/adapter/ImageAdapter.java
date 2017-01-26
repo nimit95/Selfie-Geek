@@ -65,14 +65,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                     THUMBSIZE,
                     THUMBSIZE);
         holder.image.setImageBitmap(bmp);}*/
-        if(isImageFile(imageData.get(position))){
-        Picasso.with(context)
+        if (isImageFile(imageData.get(position))) {
+            Picasso.with(context)
 
-                .load( new File(imageData.get(position))).resize(500,500).into(holder.image);}
-        else{
+                    .load(new File(imageData.get(position))).resize(500, 500).into(holder.image);
+        } else {
             //Bitmap bmp = ThumbnailUtils.createVideoThumbnail(imageData.get(position),MediaStore.Images.Thumbnails.MICRO_KIND);
-           //BitmapFactory.Options mo = new BitmapFactory().O
-             //holder.image.setImageBitmap(bmp);
+            //BitmapFactory.Options mo = new BitmapFactory().O
+            //holder.image.setImageBitmap(bmp);
             Glide.with(context).load(imageData.get(position)).into(holder.image);
 
         }
@@ -98,15 +98,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                             .putExtra("image_detail", imageData.get(getAdapterPosition())).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);*/
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    if(isImageFile(imageData.get(getAdapterPosition())))
-                        intent.setDataAndType(Uri.fromFile(new File(imageData.get(getAdapterPosition()))),"image/.jpg");
+                    if (isImageFile(imageData.get(getAdapterPosition())))
+                        intent.setDataAndType(Uri.fromFile(new File(imageData.get(getAdapterPosition()))), "image/.jpg");
                     else
-                        intent.setDataAndType(Uri.fromFile(new File(imageData.get(getAdapterPosition()))),"video/");
+                        intent.setDataAndType(Uri.fromFile(new File(imageData.get(getAdapterPosition()))), "video/");
                     context.startActivity(intent);
                 }
             });
         }
     }
+
     public static boolean isImageFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
         return mimeType != null && mimeType.startsWith("image");

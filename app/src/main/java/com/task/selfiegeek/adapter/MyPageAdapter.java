@@ -13,13 +13,16 @@ import com.task.selfiegeek.fragments.ViewUpload;
 
 public class MyPageAdapter extends FragmentPagerAdapter {
     private static final int NUM_COUNT = 2;
+
     public MyPageAdapter(FragmentManager fm) {
         super(fm);
     }
+
     private ViewUpload viewUpload = new ViewUpload();
+
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return "Camera";
             case 1:
@@ -31,9 +34,9 @@ public class MyPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
-                return  new CameraFragment();
+                return new CameraFragment();
             case 1:
                 return viewUpload;
             default:
@@ -45,5 +48,8 @@ public class MyPageAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return NUM_COUNT;
     }
-    public ViewUpload getFragment(){return viewUpload;}
+
+    public ViewUpload getFragment() {
+        return viewUpload;
+    }
 }

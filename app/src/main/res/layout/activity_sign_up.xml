@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.task.selfiegeek.activity.SignUp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,7 +20,7 @@
             android:textStyle="bold"
             android:textColor="#d44b2b"
             android:fontFamily="sans-serif-smallcaps"
-            android:text = "SELFIE GEEK"/>
+            android:text="SELFIE GEEK" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,12 +28,14 @@
             android:textSize="20sp"
             android:layout_gravity="center"
             android:textColor="#F1582C"
-            android:text = "Powered By"/>
+            android:text="Powered By" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:src="@drawable/kinvey"
             android:layout_gravity="center"
             android:layout_height="wrap_content" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,12 +51,13 @@
             android:maxLines="1"
             android:hint="Password"
             android:inputType="textPassword"
-            android:id="@+id/password"/>
+            android:id="@+id/password" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sign_up"
             android:layout_gravity="center"
-            android:text="@string/signup"/>
+            android:text="@string/signup" />
     </LinearLayout>
 </RelativeLayout>

@@ -11,12 +11,14 @@ import com.task.selfiegeek.utils.Constants;
 
 public class GetClient {
     private Client myClient;
-    String key= Constants.key;
-    String secret=Constants.secretKey;
-    public Client getClient(){
+    String key = Constants.key;
+    String secret = Constants.secretKey;
+
+    public Client getClient() {
         return this.myClient;
     }
-    public GetClient(Context context){
-        myClient = new Client.Builder(key, secret,context).build();
+
+    public GetClient(Context context) {
+        myClient = new Client.Builder(key, secret, context).build();
     }
 }

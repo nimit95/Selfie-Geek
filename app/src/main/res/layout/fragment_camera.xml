@@ -10,15 +10,15 @@
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_gravity="right|center"
         android:text="S\nL\nI\nD\nE\n\nT\nO\n\nV\nI\nE\nW"
-        android:textColor="#ffffff"/>
+        android:textColor="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -37,7 +37,8 @@
         android:layout_gravity="bottom|left"
         android:layout_margin="5dp"
         android:src="@drawable/ic_camera_front_black_24dp"
-        android:id="@+id/switch_camera"/>
+        android:id="@+id/switch_camera" />
+
     <android.support.design.widget.FloatingActionButton
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -46,5 +47,5 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="5dp"
         android:src="@drawable/ic_videocam_black_24dp"
-        android:id="@+id/video"/>
+        android:id="@+id/video" />
 </FrameLayout>

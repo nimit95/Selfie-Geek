@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:layout_height="wrap_content"
 
-        android:layout_centerInParent="true" >
+        android:layout_centerInParent="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
             android:textStyle="bold"
             android:textColor="#d44b2b"
             android:fontFamily="sans-serif-smallcaps"
-            android:text = "SELFIE GEEK"/>
+            android:text="SELFIE GEEK" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,12 +29,14 @@
             android:textSize="20sp"
             android:layout_gravity="center"
             android:textColor="#F1582C"
-            android:text = "Powered By"/>
+            android:text="Powered By" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:src="@drawable/kinvey"
             android:layout_gravity="center"
             android:layout_height="wrap_content" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,19 +52,21 @@
             android:maxLines="1"
             android:hint="Password"
             android:inputType="textPassword"
-            android:id="@+id/password"/>
+            android:id="@+id/password" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:id="@+id/no_account"
-            android:text="@string/no_account"/>
+            android:text="@string/no_account" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/log_in"
             android:layout_gravity="center"
-            android:text="@string/login"/>
+            android:text="@string/login" />
 
     </LinearLayout>
 </RelativeLayout>

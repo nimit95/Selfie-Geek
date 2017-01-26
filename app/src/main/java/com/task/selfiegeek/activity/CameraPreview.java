@@ -16,8 +16,9 @@ import java.io.IOException;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
-    String TAG="YO";
-    public CameraPreview(Context context, Camera camera,int w, int h) {
+    String TAG = "YO";
+
+    public CameraPreview(Context context, Camera camera, int w, int h) {
         super(context);
         mCamera = camera;
 
@@ -26,12 +27,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder = getHolder();
         mHolder.setSizeFromLayout();
         mHolder.lockCanvas();
-        mHolder.setFixedSize((int)(w/1),h);
+        mHolder.setFixedSize((int) (w / 1), h);
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
-    public CameraPreview(Context context, Camera camera){
+
+    public CameraPreview(Context context, Camera camera) {
         super(context);
         mHolder = getHolder();
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -57,17 +59,17 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
 
-        if (mHolder.getSurface() == null){
+        if (mHolder.getSurface() == null) {
             // preview surface does not exist
             return;
         }
         //holder.setSizeFromLayout();
-       // holder.setFixedSize((int)(w/1.1),h);
+        // holder.setFixedSize((int)(w/1.1),h);
         //holder.lockCanvas();
         // stop preview before making changes
         try {
             mCamera.stopPreview();
-        } catch (Exception e){
+        } catch (Exception e) {
             // ignore: tried to stop a non-existent preview
         }
 
@@ -79,7 +81,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }

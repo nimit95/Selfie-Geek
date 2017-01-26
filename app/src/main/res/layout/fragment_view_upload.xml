@@ -6,6 +6,7 @@
     android:id="@+id/upload"
     android:background="@color/black"
     tools:context="com.task.selfiegeek.fragments.ViewUpload">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_below="@+id/toolbar"

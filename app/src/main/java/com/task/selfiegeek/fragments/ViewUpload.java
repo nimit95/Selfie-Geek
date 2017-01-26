@@ -30,6 +30,7 @@ public class ViewUpload extends Fragment {
     private List<String> imlocs;
     private File directory;
     private ImageAdapter imageAdapter;
+
     public ViewUpload() {
         // Required empty public constructor
     }
@@ -42,27 +43,27 @@ public class ViewUpload extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_upload, container, false);
         imlocs = new ArrayList<>();
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setHasFixedSize(true);
         directory = new File(Constants.imgLoc);
-        if(directory.exists()) {
+        if (directory.exists()) {
             File f[] = directory.listFiles();
             for (int i = 0; i < f.length; i++)
                 imlocs.add(f[i].getPath());
-        }
-        else{
+        } else {
 
         }
-        imageAdapter = new ImageAdapter(getActivity(),imlocs);
+        imageAdapter = new ImageAdapter(getActivity(), imlocs);
         recyclerView.setAdapter(imageAdapter);
         return view;
     }
+
     public void update() {
-        if(directory.exists()) {
+        if (directory.exists()) {
             File f[] = directory.listFiles();
-            if(f.length>imlocs.size()) {
+            if (f.length > imlocs.size()) {
                 for (int i = imlocs.size(); i < f.length; i++)
                     imlocs.add(f[i].getPath());
             }

@@ -19,6 +19,7 @@ public class SignUp extends AppCompatActivity {
     private EditText username, password;
     private Button signUp;
     private GetClient getClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,18 +41,18 @@ public class SignUp extends AppCompatActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.show();
-                if(getClient.getClient().user().isUserLoggedIn()){
+                if (getClient.getClient().user().isUserLoggedIn()) {
                     startActivity(new Intent(SignUp.this, MainActivity.class));
                     finishAffinity();
                 }
             }
 
             public void onSuccess(User u) {
-                if (getApplicationContext()== null){
+                if (getApplicationContext() == null) {
                     return;
                 }
-                CharSequence text = "Welcome " ;
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+                CharSequence text = "Welcome ";
+                // Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                 startActivity(new Intent(SignUp.this, MainActivity.class));
                 finish();
             }

@@ -19,29 +19,31 @@ import java.io.IOException;
 public class UploadFile {
     private Context context;
     private GetClient getClient;
+
     public UploadFile(Context context) {
         this.context = context;
         getClient = new GetClient(context);
     }
-    public void uploadFile(final File target) throws IOException{
-        FileMetaData meta = new FileMetaData(target.getName())     ;
+
+    public void uploadFile(final File target) throws IOException {
+        FileMetaData meta = new FileMetaData(target.getName());
         meta.setId(target.getName());
-       getClient.getClient().file().upload(meta, target, new UploaderProgressListener() {
-           @Override
-           public void progressChanged(MediaHttpUploader mediaHttpUploader) throws IOException {
-               Log.i(Constants.TAG, "upload progress: " + mediaHttpUploader.getUploadState());
-           }
+        getClient.getClient().file().upload(meta, target, new UploaderProgressListener() {
+            @Override
+            public void progressChanged(MediaHttpUploader mediaHttpUploader) throws IOException {
+                Log.i(Constants.TAG, "upload progress: " + mediaHttpUploader.getUploadState());
+            }
 
-           @Override
-           public void onSuccess(FileMetaData fileMetaData) {
-                Toast.makeText(context,"Uploaded "+ target.getName(),Toast.LENGTH_SHORT ).show();
-           }
+            @Override
+            public void onSuccess(FileMetaData fileMetaData) {
+                Toast.makeText(context, "Uploaded " + target.getName(), Toast.LENGTH_SHORT).show();
+            }
 
-           @Override
-           public void onFailure(Throwable throwable) {
-               Log.e(Constants.TAG, "failed to upload: " , throwable);
-           }
-       });
+            @Override
+            public void onFailure(Throwable throwable) {
+                Log.e(Constants.TAG, "failed to upload: ", throwable);
+            }
+        });
 
 /*        new GetClient(context).getClient().file().upload(meta, target, new UploaderProgressListener() {
 
