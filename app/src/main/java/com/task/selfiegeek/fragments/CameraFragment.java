@@ -53,8 +53,9 @@ public class CameraFragment extends Fragment {
     private boolean isCamera = true;
     private MediaRecorder recorder;
     private UploadFile uploadFile;
-
+    private int i=0;
     private String videoPath;
+    private FrameLayout preview;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -78,7 +79,7 @@ public class CameraFragment extends Fragment {
         mCamera = getCameraInstance(0);
         uploadFile = new UploadFile(getActivity());
         mPreview = new CameraPreview(getActivity(), mCamera, getActivity().getWindowManager().getDefaultDisplay().getWidth(), 0);
-        final FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
+        preview = (FrameLayout) view.findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         recorder = new MediaRecorder();
         click = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
@@ -137,9 +138,11 @@ public class CameraFragment extends Fragment {
                 } else if (isBack) {
                     isBack = false;
                     switchCamera.setImageResource(R.drawable.ic_camera_rear_black_24dp);
-                    mCamera.startPreview();
-                    //          mCamera.release();
+                    mCamera.stopPreview();
+                    mCamera.release();
                     mCamera = getCameraInstance(1);
+                    i=1;
+
                     mCamera.setDisplayOrientation(90);
                     try {
                         mCamera.setPreviewDisplay(mPreview.getHolder());
@@ -150,9 +153,11 @@ public class CameraFragment extends Fragment {
                 } else {
                     isBack = true;
                     switchCamera.setImageResource(R.drawable.ic_camera_front_black_24dp);
-                    mCamera.startPreview();
-                    //        mCamera.release();
+                    mCamera.stopPreview();
+                    mCamera.release();
+                    i = 0;
                     mCamera = getCameraInstance(0);
+
                     mCamera.setDisplayOrientation(90);
                     try {
                         mCamera.setPreviewDisplay(mPreview.getHolder());
@@ -185,9 +190,38 @@ public class CameraFragment extends Fragment {
 
     @Override
     public void onPause() {
+        if(mCamera != null) {
+            mCamera.stopPreview();
+            mPreview.setCamera(null);
+            mCamera.release();
+            mCamera = null;
+        }
         super.onPause();
         //releaseMediaRecorder();       // if you are using MediaRecorder, release it first
-        //releaseCamera();              // release the camera immediately on pause event
+    //    releaseCamera();
+
+        // release the camera immediately on pause event
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCamera = getCameraInstance(i);
+        mCamera.startPreview();
+        mPreview.setCamera(mCamera);
+   /*     if(mCamera==null) {
+            mCamera = getCameraInstance(i);
+            mCamera.setDisplayOrientation(90);
+            try {
+                mCamera.setPreviewDisplay(mPreview.getHolder());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mCamera.startPreview();
+        }*/
+       /* mCamera = getCameraInstance(i);
+        mPreview = new CameraPreview(getActivity(), mCamera, getActivity().getWindowManager().getDefaultDisplay().getWidth(), 0);
+        preview.addView(mPreview);*/
     }
 
     private void releaseMediaRecorder() {
