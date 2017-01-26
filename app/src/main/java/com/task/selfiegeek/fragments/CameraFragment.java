@@ -53,7 +53,7 @@ public class CameraFragment extends Fragment {
     private boolean isCamera = true;
     private MediaRecorder recorder;
     private UploadFile uploadFile;
-
+    private int i =0;
     private String videoPath;
 
     // TODO: Rename and change types of parameters
@@ -141,6 +141,7 @@ public class CameraFragment extends Fragment {
                     mCamera.release();
                     mPreview.getHolder().removeCallback(mPreview);
                     mCamera = getCameraInstance(1);
+                    i=1;
                     mCamera.setDisplayOrientation(90);
                     try {
                         mCamera.setPreviewDisplay(mPreview.getHolder());
@@ -156,6 +157,7 @@ public class CameraFragment extends Fragment {
                     mPreview.getHolder().removeCallback(mPreview);
                     mCamera = getCameraInstance(0);
                     mCamera.setDisplayOrientation(90);
+                    i=0;
                     try {
                         mCamera.setPreviewDisplay(mPreview.getHolder());
                     } catch (IOException e) {
@@ -197,7 +199,7 @@ public class CameraFragment extends Fragment {
     public void onResume() {
         Log.e("yah","yaj");
 
-        mCamera = getCameraInstance(0);
+        mCamera = getCameraInstance(i);
         mPreview = new CameraPreview(getActivity(), mCamera, getActivity().getWindowManager().getDefaultDisplay().getWidth(), 0);
         preview.addView(mPreview);
         super.onResume();
@@ -320,6 +322,7 @@ public class CameraFragment extends Fragment {
             try {
                 File newFile = File.createTempFile("video" + currentDateandTime, ".3gp", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
+                Log.e("km",newFile.getAbsolutePath());
                 setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                 ////  Log.v(LOGTAG,"Couldn't create file");
@@ -330,6 +333,7 @@ public class CameraFragment extends Fragment {
             try {
                 File newFile = File.createTempFile("video" + currentDateandTime, ".mp4", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
+                Log.e("km",newFile.getAbsolutePath());
                 setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                 // Log.v(LOGTAG,"Couldn't create file");
