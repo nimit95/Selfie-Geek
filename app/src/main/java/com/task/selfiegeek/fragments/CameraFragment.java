@@ -197,10 +197,6 @@ public class CameraFragment extends Fragment {
             mCamera = null;
         }
         super.onPause();
-        //releaseMediaRecorder();       // if you are using MediaRecorder, release it first
-    //    releaseCamera();
-
-        // release the camera immediately on pause event
     }
 
     @Override
@@ -209,19 +205,6 @@ public class CameraFragment extends Fragment {
         mCamera = getCameraInstance(i);
         mCamera.startPreview();
         mPreview.setCamera(mCamera);
-   /*     if(mCamera==null) {
-            mCamera = getCameraInstance(i);
-            mCamera.setDisplayOrientation(90);
-            try {
-                mCamera.setPreviewDisplay(mPreview.getHolder());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mCamera.startPreview();
-        }*/
-       /* mCamera = getCameraInstance(i);
-        mPreview = new CameraPreview(getActivity(), mCamera, getActivity().getWindowManager().getDefaultDisplay().getWidth(), 0);
-        preview.addView(mPreview);*/
     }
 
     private void releaseMediaRecorder() {
@@ -341,7 +324,7 @@ public class CameraFragment extends Fragment {
             try {
                 File newFile = File.createTempFile("video" + currentDateandTime, ".3gp", new File(imgLoc));
                 recorder.setOutputFile(newFile.getAbsolutePath());
-                setVideoPath(newFile.getAbsolutePath());
+                setVideoPath(newFile.getAbsolutePath()+".3gp");
             } catch (IOException e) {
                 ////  Log.v(LOGTAG,"Couldn't create file");
                 e.printStackTrace();
@@ -349,8 +332,8 @@ public class CameraFragment extends Fragment {
             }
         } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
             try {
-                File newFile = File.createTempFile("video" + currentDateandTime, ".3gp", new File(imgLoc));
-                recorder.setOutputFile(newFile.getAbsolutePath());
+                File newFile = File.createTempFile("video" + currentDateandTime, ".mp4", new File(imgLoc));
+                recorder.setOutputFile(newFile.getAbsolutePath()+".mp4");
                 setVideoPath(newFile.getAbsolutePath());
             } catch (IOException e) {
                 // Log.v(LOGTAG,"Couldn't create file");
