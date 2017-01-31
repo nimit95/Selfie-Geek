@@ -35,34 +35,45 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void submit() {
-        getClient.getClient().user().create(username.getText().toString(), password.getText().toString(), new KinveyUserCallback() {
-            public void onFailure(Throwable t) {
-                CharSequence text = "Already Registered.";
-                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                toast.show();
-                if (getClient.getClient().user().isUserLoggedIn()) {
+        if(check(username,password)) {
+            getClient.getClient().user().create(username.getText().toString(), password.getText().toString(), new KinveyUserCallback() {
+                public void onFailure(Throwable t) {
+                    CharSequence text = "Already Registered.";
+                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                    toast.show();
+                    if (getClient.getClient().user().isUserLoggedIn()) {
+                        startActivity(new Intent(SignUp.this, MainActivity.class));
+                        finishAffinity();
+                    }
+                }
+
+                public void onSuccess(User u) {
+                    if (getApplicationContext() == null) {
+                        return;
+                    }
+                    CharSequence text = "Welcome ";
+                    // Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(SignUp.this, MainActivity.class));
-                    finishAffinity();
+                    finish();
                 }
-            }
 
-            public void onSuccess(User u) {
-                if (getApplicationContext() == null) {
-                    return;
-                }
-                CharSequence text = "Welcome ";
-                // Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-                startActivity(new Intent(SignUp.this, MainActivity.class));
-                finish();
-            }
-
-        });
+            });
+        }
+        else
+            Toast.makeText(getApplicationContext(),"Enter correct username and password",Toast.LENGTH_SHORT).show();
     }
 
     private void intialise() {
         username = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         signUp = (Button) findViewById(R.id.sign_up);
+    }
+    boolean check(EditText username, EditText password) {
+        if (username.getText().toString().trim().length() != 0 &&
+                password.getText().toString().trim().length() != 0)
+            return true;
+        else
+            return false;
     }
 }
